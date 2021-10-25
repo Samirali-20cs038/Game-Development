@@ -16,7 +16,6 @@ public class BattleHud : MonoBehaviour
 	[SerializeField] Text statusText;
 	[SerializeField] HPBar hpBar;
 	[SerializeField] GameObject expBar;
-	
 
 	//To set the color of the text based on the status
 	[SerializeField] Color psnColor;//Poison status
@@ -80,9 +79,12 @@ public class BattleHud : MonoBehaviour
 		expBar.transform.localScale = new Vector3(normalizedExp, 1 , 1);
 	}
 
-	public IEnumerator SetExpSmooth()
+	public IEnumerator SetExpSmooth(bool reset=false)
 	{
 		if(expBar == null) yield break;
+
+		if(reset)
+			expBar.transform.localScale = new Vector3(0, 1, 1);
 
 		float normalizedExp = GetNormalizedExp();
 		yield return expBar.transform.DOScaleX(normalizedExp, 1.5f).WaitForCompletion();
