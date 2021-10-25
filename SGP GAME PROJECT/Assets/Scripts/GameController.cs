@@ -1,14 +1,9 @@
-﻿/*
-	Module name GameController
-	Module creation date - 20-Sep-2021
-	@author: Abhishek Kayasth
-*/
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 // Public Enum for game states
-public enum GameState { FreeRoam, Battle }
+public enum GameState { FreeRoam, Battle, Dialogue,Cutscene }
 
 public class GameController : MonoBehaviour
 {
@@ -18,19 +13,42 @@ public class GameController : MonoBehaviour
 	[SerializeField] Camera worldCamera;
 	// Local variables
 	GameState state;
+	public static GameController Instance { get; private set;}
+
+	private void Awake()
+	{
+		Instance = this;
+		ConditionsDB.Init();
+	}
 
 	private void Start()
 	{
 		playerController.OnEncounter += StartBattle;
 		battleSystem.OnBattleOver += EndBattle;
+
+		//Using Lambda notation
+		playerController.OnEnterTrainersView += (Collider2D trainerCollider) =>
+		{
+			var trainer = trainerCollider.GetComponentInParent<TrainerController>();
+			if (trainer != null)
+			{
+				state = GameState.Cutscene;
+				StartCoroutine(trainer.TriggerTrainerBattle(playerController));
+			}
+		};
+
+		DialogueManager.Instance.OnShowDialog += () =>
+		{
+			state = GameState.Dialogue;
+		};
+
+		DialogueManager.Instance.OnCloseDialog += () =>
+		{
+			if(state == GameState.Dialogue)
+				state = GameState.FreeRoam;
+		};
 	}
-	// This method reverts game state back into free roam state
-	void EndBattle(bool won)
-	{
-		state = GameState.FreeRoam;
-		battleSystem.gameObject.SetActive(false);
-		worldCamera.gameObject.SetActive(true);
-	}
+	
 	// This method makes game state into battle state
 	void StartBattle()
 	{
@@ -41,9 +59,39 @@ public class GameController : MonoBehaviour
 		var playerParty = playerController.GetComponent<PokemonParty>();
 		var wildPokemon = FindObjectOfType<MapArea>().GetComponent<MapArea>().GetRandomWildPokemon();
 
-		battleSystem.StartBattle(playerParty, wildPokemon);
+		var wildPokemonCopy = new Pokemon (wildPokemon.Base, wildPokemon.Level);
+
+		battleSystem.StartBattle(playerParty, wildPokemonCopy);
 	}
-	//
+
+	TrainerController trainer;
+	
+	public void StartTrainerBattle(TrainerController trainer)
+	{
+		state = GameState.Battle;
+		battleSystem.gameObject.SetActive(true);
+		worldCamera.gameObject.SetActive(false);
+
+		this.trainer = trainer;
+		var playerParty = playerController.GetComponent<PokemonParty>();
+		var trainerParty = trainer.GetComponent<PokemonParty>();
+
+		battleSystem.StartTrainerBattle(playerParty, trainerParty);
+	}
+
+	// This method reverts game state back into free roam state
+	void EndBattle(bool won)
+	{
+		if (trainer != null && won == true)
+		{
+			trainer.BattleLost();
+			trainer=null;
+		}
+
+		state = GameState.FreeRoam;
+		battleSystem.gameObject.SetActive(false);
+		worldCamera.gameObject.SetActive(true);
+	}
 	private void Update()
 	{
 		// Check current state and handle updates according to it
@@ -54,6 +102,10 @@ public class GameController : MonoBehaviour
 		else if (state == GameState.Battle)
 		{
 			battleSystem.HandleUpdate();
+		}
+		else if (state == GameState.Dialogue)
+		{
+			DialogueManager.Instance.HandleUpdate();
 		}
 	}
 }

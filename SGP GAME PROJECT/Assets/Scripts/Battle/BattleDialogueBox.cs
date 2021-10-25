@@ -1,7 +1,6 @@
 ﻿/*
 	Module name BattleDialogueBox
 	Module creation date - 04-Sep-2021
-	@author: Abhishek Kayasth
 */
 using System.Collections;
 using System.Collections.Generic;
@@ -19,10 +18,15 @@ public class BattleDialogueBox : MonoBehaviour
 	[SerializeField] Text dialogueText;
 	[SerializeField] Text ppText;
 	[SerializeField] Text typeText;
+
+	[SerializeField] Text yesText;
+	[SerializeField] Text noText;
 	// Referance variables for panels
 	[SerializeField] GameObject actionSelector;
 	[SerializeField] GameObject moveSelector;
 	[SerializeField] GameObject moveDetails;
+	[SerializeField] GameObject choiceBox;
+
 	// Referance variables for text list of actions and moves
 	[SerializeField] List<Text> actionTexts;
 	[SerializeField] List<Text> moveTexts;
@@ -60,6 +64,11 @@ public class BattleDialogueBox : MonoBehaviour
 		moveDetails.SetActive(enabled);
 	}
 
+	public void EnableChoiceBox(bool enabled)
+	{
+		choiceBox.SetActive(enabled);
+	}
+
 	// Update action panel texts according to player input
 	public void UpdateActionSelection(int selectedAction)
 	{
@@ -84,6 +93,13 @@ public class BattleDialogueBox : MonoBehaviour
 
 		ppText.text = $"PP {move.PP}/{move.Base.PP}";
 		typeText.text = move.Base.Type.ToString();
+
+		if(move.PP == 0)
+		{
+			ppText.color = Color.red;
+		}
+		else 
+			ppText.color = Color.black;
 	}
 	// Set move names available from player unit
 	public void SetMoveNames(List<Move> moves)
@@ -94,6 +110,20 @@ public class BattleDialogueBox : MonoBehaviour
 				moveTexts[i].text = moves[i].Base.Name;
 			else
 				moveTexts[i].text = "-";
+		}
+	}
+
+	public void UpdateChoiceBox(bool yesSelected)
+	{
+		if (yesSelected)
+		{
+			yesText.color = highlightedColor;
+			noText.color = Color.black;
+		}
+		else
+		{
+			yesText.color = Color.black;
+			noText.color = highlightedColor;
 		}
 	}
 }

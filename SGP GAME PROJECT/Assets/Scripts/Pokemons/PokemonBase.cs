@@ -18,8 +18,27 @@ public class PokemonBase : ScriptableObject
     [SerializeField] int spAttack;
     [SerializeField] int spDefense;
     [SerializeField] int speed;
+    
+    [SerializeField] int expYield;
+    [SerializeField] GrowthRate growthRate;
+
+    [SerializeField] int catchRate = 255;
 
     [SerializeField] List<LearnableMove> learnableMoves;
+
+    public int GetExpForLevel(int level)
+    {
+        if(growthRate == GrowthRate.Fast)
+        {
+            return 4 * (level * level * level) / 5;
+        }
+        else if(growthRate == GrowthRate.MediumFast)
+        {
+            return (level * level * level);
+        }
+
+        return -1;
+    }
 
     public string Name
     {
@@ -74,6 +93,12 @@ public class PokemonBase : ScriptableObject
     {
         get { return learnableMoves; }
     }
+
+    public int CatchRate => catchRate;
+
+    public int ExpYield => expYield;
+
+    public GrowthRate GrowthRate => growthRate;
 }
 
 
@@ -113,7 +138,14 @@ public enum PokemonType
     Bug,
     Rock,
     Ghost,
-    Dragon
+    Dragon,
+    Dark,
+    Steel
+}
+
+public enum GrowthRate
+{
+    Fast, MediumFast
 }
 
 public enum Stat
@@ -122,22 +154,34 @@ public enum Stat
     Defense,
     SpAttack,
     SpDefense,
-    Speed
+    Speed,
+    //These 2 are not actual stats, they're used to boost the moveAccuracy
+    Accuracy,
+    Evasion
 }
 
 public class TypeChart
 {
     static float[][] chart =
     {
-        //                   NOR FIR WAT ELE GRA ICE FIG POI
-        /*NOR*/new float[] { 1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f },
-        /*FIR*/new float[] { 1f,.5f,.5f, 1f, 2f, 2f, 1f, 1f },
-        /*WAT*/new float[] { 1f, 2f,.5f, 1f,.5f, 1f, 1f, 1f },
-        /*ELE*/new float[] { 1f, 1f, 2f,.5f,.5f, 1f, 1f, 1f },
-        /*GRA*/new float[] { 1f,.5f, 2f, 1f,.5f, 1f, 1f,.5f },
-        /*ICE*/new float[] { 1f,.5f,.5f, 1f, 2f,.5f, 1f, 1f },
-        /*FIG*/new float[] { 2f, 1f, 1f, 1f, 1f, 2f, 1f,.5f },
-        /*POI*/new float[] { 1f, 1f, 1f, 1f, 2f, 1f, 1f,.5f },
+        //                   NOR FIR WAT ELE GRA ICE FIG POI GRO FLY PSY BUG ROC GHO DRA DAR STE
+        /*NOR*/new float[] { 1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f,.5f, 0f, 1f, 1f,.5f },
+        /*FIR*/new float[] { 1f,.5f,.5f, 1f, 2f, 2f, 1f, 1f, 1f, 1f, 1f, 2f,.5f, 1f,.5f, 1f, 2f },
+        /*WAT*/new float[] { 1f, 2f,.5f, 1f,.5f, 1f, 1f, 1f, 2f, 1f, 1f, 1f, 2f, 1f,.5f, 1f, 1f },
+        /*ELE*/new float[] { 1f, 1f, 2f,.5f,.5f, 1f, 1f, 1f, 0f, 2f, 1f, 1f, 1f, 1f,.5f, 1f, 1f },
+        /*GRA*/new float[] { 1f,.5f, 2f, 1f,.5f, 1f, 1f,.5f, 2f,.5f, 1f,.5f, 2f, 1f,.5f, 1f,.5f },
+        /*ICE*/new float[] { 1f,.5f,.5f, 1f, 2f,.5f, 1f, 1f, 2f, 2f, 1f, 1f, 1f, 1f, 2f, 1f,.5f },
+        /*FIG*/new float[] { 2f, 1f, 1f, 1f, 1f, 2f, 1f,.5f, 1f,.5f,.5f,.5f, 2f, 0f, 1f, 2f, 2f },
+        /*POI*/new float[] { 1f, 1f, 1f, 1f, 2f, 1f, 1f,.5f,.5f, 1f, 1f, 1f,.5f,.5f, 1f, 1f, 0f },
+        /*GRO*/new float[] { 1f, 2f, 1f, 2f,.5f, 1f, 1f, 2f, 1f, 0f, 1f,.5f, 2f, 1f, 1f, 1f, 2f },
+        /*FLY*/new float[] { 1f, 1f, 1f,.5f, 2f, 1f, 2f, 1f, 1f, 1f, 1f, 2f,.5f, 1f, 1f, 1f,.5f },
+        /*PSY*/new float[] { 1f, 1f, 1f, 1f, 1f, 1f, 2f, 2f, 1f, 1f,.5f, 1f, 1f, 1f, 1f, 0f,.5f },
+        /*BUG*/new float[] { 1f,.5f, 1f, 1f, 2f, 1f,.5f,.5f, 1f,.5f, 2f, 1f, 1f,.5f, 1f, 2f,.5f },
+        /*ROC*/new float[] { 1f, 2f, 1f, 1f, 1f, 2f,.5f, 1f,.5f, 2f, 1f, 2f, 1f, 1f, 1f, 1f,.5f },
+        /*GHO*/new float[] { 0f, 1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f, 2f, 1f, 1f, 2f, 1f,.5f,.5f },
+        /*DRA*/new float[] { 1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f, 2f, 1f,.5f },
+        /*DAR*/new float[] { 1f, 1f, 1f, 1f, 1f, 1f,.5f, 1f, 1f, 1f, 2f, 1f, 1f, 2f, 1f,.5f,.5f },
+        /*STE*/new float[] { 1f,.5f,.5f,.5f, 1f, 2f, 1f, 1f, 1f, 1f, 1f, 1f, 2f, 1f, 1f, 1f,.5f }
     };
 
     public static float GetEffectiveness(PokemonType attackType, PokemonType defenseType)

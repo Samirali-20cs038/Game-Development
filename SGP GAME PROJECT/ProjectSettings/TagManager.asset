@@ -15,9 +15,9 @@ TagManager:
   - 
   - SolidObjects
   - LongGrass
-  - 
-  - 
-  - 
+  - Interactable
+  - Player
+  - FovLayer
   - 
   - 
   - 
@@ -49,4 +49,7 @@ TagManager:
     locked: 0
   - name: Player
     uniqueID: 1931461199
+    locked: 0
+  - name: Battle
+    uniqueID: 1763223205
     locked: 0

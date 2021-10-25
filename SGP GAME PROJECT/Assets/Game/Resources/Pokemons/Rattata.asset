@@ -1,0 +1,42 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5cfcd66551b93a64c929b251294f2319, type: 3}
+  m_Name: Rattata
+  m_EditorClassIdentifier: 
+  name: Rattata
+  description: 
+  frontSprite: {fileID: -7412296027438122445, guid: fb00675958ade6d4d8bbc515eb0c12e3, type: 3}
+  backSprite: {fileID: 2874935018530966408, guid: 5564d4fe5d9e3d14691fe2ff77a7d135, type: 3}
+  type1: 1
+  type2: 0
+  maxHp: 30
+  attack: 56
+  defense: 35
+  spAttack: 25
+  spDefense: 35
+  speed: 72
+  expYield: 51
+  growthRate: 1
+  catchRate: 255
+  learnableMoves:
+  - moveBase: {fileID: 11400000, guid: a22660a3aba620b45a15c66756155e95, type: 2}
+    level: 2
+  - moveBase: {fileID: 11400000, guid: 24fc631cb1f53ba438af1a0c113d4430, type: 2}
+    level: 1
+  - moveBase: {fileID: 11400000, guid: 8570676b13d4c0a49a2f22782e854ed9, type: 2}
+    level: 8
+  - moveBase: {fileID: 11400000, guid: 3645988385d0df945bae5abab3919c31, type: 2}
+    level: 4
+  - moveBase: {fileID: 11400000, guid: 2b91586bb24856f4888ab8a97af7c38a, type: 2}
+    level: 6
+  - moveBase: {fileID: 11400000, guid: e07354bf85fe2e040b4c7d4665971830, type: 2}
+    level: 12

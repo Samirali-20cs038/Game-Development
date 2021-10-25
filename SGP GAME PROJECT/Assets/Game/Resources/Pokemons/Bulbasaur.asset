@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   name: Bulbasaur
   description: 
-  frontSprite: {fileID: 21300000, guid: 0f37bf3cf5680a64d863b5f155b2a597, type: 3}
-  backSprite: {fileID: 21300000, guid: aacaae602a38f884ab9e02e43de3736d, type: 3}
+  frontSprite: {fileID: 5558469547192510114, guid: fb00675958ade6d4d8bbc515eb0c12e3, type: 3}
+  backSprite: {fileID: 1693834065650845620, guid: 5564d4fe5d9e3d14691fe2ff77a7d135, type: 3}
   type1: 5
   type2: 8
   maxHp: 45
@@ -24,10 +24,27 @@ MonoBehaviour:
   spAttack: 65
   spDefense: 65
   speed: 45
+  expYield: 64
+  growthRate: 1
+  catchRate: 45
   learnableMoves:
-  - moveBase: {fileID: 11400000, guid: 8570676b13d4c0a49a2f22782e854ed9, type: 2}
-    level: 1
   - moveBase: {fileID: 11400000, guid: 24fc631cb1f53ba438af1a0c113d4430, type: 2}
+    level: 1
+  - moveBase: {fileID: 11400000, guid: 8570676b13d4c0a49a2f22782e854ed9, type: 2}
+    level: 2
+  - moveBase: {fileID: 11400000, guid: 3645988385d0df945bae5abab3919c31, type: 2}
     level: 4
+  - moveBase: {fileID: 11400000, guid: b8f715c6e39b9b840a98b2c9787593b6, type: 2}
+    level: 8
+  - moveBase: {fileID: 11400000, guid: 141e6c94fcc1c054ea9d4145937f4506, type: 2}
+    level: 10
+  - moveBase: {fileID: 11400000, guid: 5512e3faf708b344a8879cdac29b755c, type: 2}
+    level: 28
   - moveBase: {fileID: 11400000, guid: 948297eb1a88c2b47ad1727eef58a7db, type: 2}
     level: 7
+  - moveBase: {fileID: 11400000, guid: 1796e1d2f51e2ea4281d3eae1e574897, type: 2}
+    level: 12
+  - moveBase: {fileID: 11400000, guid: 44af2e7cff05b3447a22441fc04697b7, type: 2}
+    level: 16
+  - moveBase: {fileID: 11400000, guid: 12de9c92e1445b04fa4c7cd6e8075c9f, type: 2}
+    level: 10

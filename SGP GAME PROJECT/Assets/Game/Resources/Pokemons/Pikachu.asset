@@ -1,0 +1,50 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5cfcd66551b93a64c929b251294f2319, type: 3}
+  m_Name: Pikachu
+  m_EditorClassIdentifier: 
+  name: Pikachu
+  description: 
+  frontSprite: {fileID: 444523089996943077, guid: fb00675958ade6d4d8bbc515eb0c12e3, type: 3}
+  backSprite: {fileID: 6827346189432621182, guid: 5564d4fe5d9e3d14691fe2ff77a7d135, type: 3}
+  type1: 4
+  type2: 0
+  maxHp: 35
+  attack: 55
+  defense: 30
+  spAttack: 50
+  spDefense: 40
+  speed: 90
+  expYield: 112
+  growthRate: 1
+  catchRate: 190
+  learnableMoves:
+  - moveBase: {fileID: 11400000, guid: 24fc631cb1f53ba438af1a0c113d4430, type: 2}
+    level: 1
+  - moveBase: {fileID: 11400000, guid: 8570676b13d4c0a49a2f22782e854ed9, type: 2}
+    level: 2
+  - moveBase: {fileID: 11400000, guid: 07b53ec7328337b439ac3867efd0be12, type: 2}
+    level: 3
+  - moveBase: {fileID: 11400000, guid: ba4df9fb23771074d95f2480f5329b6b, type: 2}
+    level: 6
+  - moveBase: {fileID: 11400000, guid: e07354bf85fe2e040b4c7d4665971830, type: 2}
+    level: 10
+  - moveBase: {fileID: 11400000, guid: 2b91586bb24856f4888ab8a97af7c38a, type: 2}
+    level: 4
+  - moveBase: {fileID: 11400000, guid: 05df1dc5f84430e4c8ca2453a75addb1, type: 2}
+    level: 16
+  - moveBase: {fileID: 11400000, guid: c471bb9f44fcf784b8c78c4b99a91ae4, type: 2}
+    level: 24
+  - moveBase: {fileID: 11400000, guid: c9039beadc78a3049b43e31985f819aa, type: 2}
+    level: 20
+  - moveBase: {fileID: 11400000, guid: ba4df9fb23771074d95f2480f5329b6b, type: 2}
+    level: 6

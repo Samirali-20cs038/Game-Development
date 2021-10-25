@@ -1,12 +1,21 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 [System.Serializable]
 public class Pokemon
 {
     [SerializeField] PokemonBase _base;
     [SerializeField] int level;
+
+    public Pokemon(PokemonBase pBase, int pLevel)
+    {
+        _base = pBase;
+        level = pLevel;
+
+        Init();
+    }
 
     public PokemonBase Base { 
         get {
@@ -19,15 +28,29 @@ public class Pokemon
         }
     }
 
+    public int Exp { get; set; }
     public int HP { get; set; }
-
     public List<Move> Moves { get; set; }
+    public Move CurrentMove {get; set;}
     public Dictionary<Stat, int> Stats { get; private set; }
     public Dictionary<Stat, int> StatBoosts { get; private set; }
-    public Queue<string> StatusChanges { get; private set; } = new Queue<string>();
+    public Condition Status {get; private set;}
+    public int StatusTime{get; set;}
+    public Queue<string> StatusChanges { get; private set; } 
+    public bool HpChanged {get; set;}
+    
+    //To set volatile status
+    public Condition VolatileStatus {get; private set;}
+    //To set volatile status time
+    public int VolatileStatusTime{get; set;}
+    
+    //To change the status of pokemon everytime 
+    public event System.Action OnStatusChanged;
+
 
     public void Init()
     {
+        //generate moves
         Moves = new List<Move>();
         foreach (var move in Base.LearnableMoves)
         {
@@ -37,11 +60,16 @@ public class Pokemon
             if (Moves.Count >= 4)
                 break;
         }
+    
+        Exp = Base.GetExpForLevel(Level);
 
         CalculateStats();
         HP = MaxHp;
 
+        StatusChanges = new Queue<string>();
         ResetStatBoost();
+        Status = null;
+        VolatileStatus = null;
     }
 
     void CalculateStats()
@@ -53,7 +81,7 @@ public class Pokemon
         Stats.Add(Stat.SpDefense, Mathf.FloorToInt((Base.SpDefense * Level) / 100f) + 5);
         Stats.Add(Stat.Speed, Mathf.FloorToInt((Base.Speed * Level) / 100f) + 5);
 
-        MaxHp = Mathf.FloorToInt((Base.MaxHp * Level) / 100f) + 10;
+        MaxHp = Mathf.FloorToInt((Base.MaxHp * Level) / 100f) + 10 + Level;
     }
 
     void ResetStatBoost()
@@ -64,7 +92,10 @@ public class Pokemon
             {Stat.Defense , 0},
             {Stat.SpAttack , 0},
             {Stat.SpDefense , 0},
-            {Stat.Speed , 0}
+            {Stat.Speed , 0},
+            {Stat.Accuracy , 0},
+            {Stat.Evasion , 0},
+
         };
     }
 
@@ -100,6 +131,17 @@ public class Pokemon
 
             Debug.Log($"{Base.Name}'s {stat} has been boosted to {StatBoosts[stat]}");
         }
+    }
+
+    public bool CheckForLevelUp()
+    {
+        if(Exp > Base.GetExpForLevel(level + 1))
+        {
+            ++level;
+            return true;
+        }
+
+        return false;
     }
 
     public int Attack {
@@ -149,24 +191,82 @@ public class Pokemon
         float d = a * move.Base.Power * ((float)attack / defense) + 2;
         int damage = Mathf.FloorToInt(d * modifier);
 
-        HP -= damage;
-        if (HP <= 0)
-        {
-            HP = 0;
-            damageDetails.Fainted = true;
-        }
+        UpdateHP(damage);
 
         return damageDetails;
     }
 
+    public void UpdateHP(int damage )
+    {
+        HP = Mathf.Clamp(HP - damage , 0 , MaxHp);
+        HpChanged = true;
+    }
+    public void SetStatus(ConditionID conditionId)
+    {
+        if (Status != null) return;
+
+        Status = ConditionsDB.Conditions[conditionId];
+        Status?.OnStart?.Invoke(this);
+        StatusChanges.Enqueue($"{Base.Name} {Status.StartMessage}");
+        OnStatusChanged?.Invoke();
+    }
+
+    public void CureStatus()
+    {
+        Status = null;
+        OnStatusChanged?.Invoke();
+    }
+
+    //Methofd to set volatile status
+    public void SetVolatileStatus(ConditionID conditionId)
+    {
+        if (VolatileStatus != null) return;
+
+        VolatileStatus = ConditionsDB.Conditions[conditionId];
+        VolatileStatus?.OnStart?.Invoke(this);
+        StatusChanges.Enqueue($"{Base.Name} {VolatileStatus.StartMessage}");
+    }
+
+    public void CureVolatileStatus()
+    {
+        VolatileStatus = null;
+    }
     public Move GetRandomMove()
     {
-        int r = Random.Range(0, Moves.Count);
-        return Moves[r];
+        //The logic to check the moves which have PP
+        var movesWithPP = Moves.Where(x => x.PP > 0).ToList();//to convert it to a list
+
+        int r = Random.Range(0, movesWithPP.Count);
+        return movesWithPP[r];
     }
+
+    public bool OnBeforeMove()
+    {
+        //canPerformMove is used which keeps track of volatile movements which occur before move
+        bool canPerformMove = true;
+        if(Status?.OnBeforeMove != null)
+        {
+            if(!Status.OnBeforeMove(this))
+                canPerformMove = false;
+        }
+
+        if(VolatileStatus?.OnBeforeMove != null)
+        {
+            if(!VolatileStatus.OnBeforeMove(this))
+                canPerformMove = false;
+        }
+        return canPerformMove;
+    }
+    public void OnAfterTurn()
+    {
+        Status?.OnAfterTurn?.Invoke(this);
+        VolatileStatus?.OnAfterTurn?.Invoke(this);
+    }
+
 
     public void OnBattleOver()
     {
+        VolatileStatus = null;
         ResetStatBoost();
     }
 }
