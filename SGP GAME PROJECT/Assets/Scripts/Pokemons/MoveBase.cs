@@ -23,35 +23,35 @@ public class MoveBase : ScriptableObject
     [SerializeField] MoveTarget target;
 
     public string Name {
-        get {return name;}
+        get { return name; }
     }
 
     public string Description {
-        get {return description;}
+        get { return description; }
     }
 
     public PokemonType Type {
-        get {return type;}
+        get { return type; }
     }
 
     public int Power {
-        get {return power;}
+        get { return power; }
     }
 
     public int Accuracy {
-        get {return accuracy;}
+        get { return accuracy; }
     }
 
     public bool AlwaysHits {
-        get {return alwaysHits;}
+        get { return alwaysHits; }
     }
 
     public int PP {
-        get {return pp;}
+        get { return pp; }
     }
 
     public int Priority {
-        get {return priority;}
+        get { return priority; }
     }
     public MoveCategory Category {
         get { return category; }
@@ -81,14 +81,12 @@ public class MoveEffects
         get { return boosts; }
     }
 
-    
-
-    public ConditionID Status{
-        get{return status; }
+    public ConditionID Status {
+        get{ return status; }
     }
 
-     public ConditionID VolatileStatus{
-        get{return volatilestatus; }
+     public ConditionID VolatileStatus {
+        get{ return volatilestatus; }
     }
 }
 
@@ -99,15 +97,13 @@ public class SecondaryEffects : MoveEffects
     [SerializeField] MoveTarget target;
 
     //Creating Properties for getter setter methods
-    public int Chance{
+    public int Chance {
         get{ return chance; }
     }
 
-    public MoveTarget Target{
+    public MoveTarget Target {
         get{ return target; }
     }
-        
-
 }
 
 [System.Serializable]

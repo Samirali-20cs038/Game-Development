@@ -15,6 +15,7 @@ public class TrainerController : MonoBehaviour, Interactable
     bool battleLost = false;
 
     Character character;
+
     private void Awake()
     {
         character = GetComponent<Character>();
@@ -26,25 +27,27 @@ public class TrainerController : MonoBehaviour, Interactable
     }
 
     private void UPdate()
-        {   
-            character.HandleUpdate();
-        }
+    {   
+        character.HandleUpdate();
+    }
+
     public void Interact (Transform initiator)
     {
         character.LookTowards(initiator.position);
 
         if (!battleLost)
         {
-            StartCoroutine(DialogueManager.Instance.ShowDialogue( dialogue, () =>
-        {
-            GameController.Instance.StartTrainerBattle(this);
-        }));
+            StartCoroutine(DialogueManager.Instance.ShowDialogue(dialogue, () =>
+            {
+                GameController.Instance.StartTrainerBattle(this);
+            }));
         }
         else
         {
             StartCoroutine(DialogueManager.Instance.ShowDialogue(dialogAfterBattle));
         }
     }
+
     public IEnumerator TriggerTrainerBattle(PlayerController player)
     {
         //Show Exclamation
@@ -60,7 +63,7 @@ public class TrainerController : MonoBehaviour, Interactable
         yield return character.Move(moveVec);
 
         //Show dialogue
-        StartCoroutine(DialogueManager.Instance.ShowDialogue( dialogue, () =>
+        StartCoroutine(DialogueManager.Instance.ShowDialogue(dialogue, () =>
         {
             GameController.Instance.StartTrainerBattle(this);
         }));
@@ -75,6 +78,7 @@ public class TrainerController : MonoBehaviour, Interactable
     public void SetFovRotation(FacingDirection dir)
     {
         float angle = 0f;
+        
         if (dir == FacingDirection.Right)
         angle = 90f;
         else if (dir == FacingDirection.Up)

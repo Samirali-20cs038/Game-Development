@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+
 [CreateAssetMenu(fileName = "Pokemon", menuName = "Pokemon/Create new pokemon")]
 public class PokemonBase : ScriptableObject
 {
@@ -157,7 +158,6 @@ public enum Stat
     SpAttack,
     SpDefense,
     Speed,
-    //These 2 are not actual stats, they're used to boost the moveAccuracy
     Accuracy,
     Evasion
 }

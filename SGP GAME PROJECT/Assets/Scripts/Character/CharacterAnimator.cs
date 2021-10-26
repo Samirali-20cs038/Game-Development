@@ -51,15 +51,14 @@ public class CharacterAnimator : MonoBehaviour
         else if (MoveY == -1)
         currentAnim = walkDownAnim;
 
-        if (currentAnim !=prevAnim || IsMoving != wasPreviouslyMoving )
+        if (currentAnim !=prevAnim || IsMoving != wasPreviouslyMoving)
         currentAnim.Start();
 
         if (IsMoving)
-        currentAnim.HandleUpdate();
+            currentAnim.HandleUpdate();
         else
-        spriteRenderer.sprite = currentAnim.Frames[0];
+            spriteRenderer.sprite = currentAnim.Frames[0];
 
-        
         wasPreviouslyMoving = IsMoving;
     }
 
@@ -67,11 +66,11 @@ public class CharacterAnimator : MonoBehaviour
     {
         if ( dir == FacingDirection.Right)
             MoveX= 1;
-            else if ( dir == FacingDirection.Left)
+        else if ( dir == FacingDirection.Left)
             MoveX= -1;
-            else if ( dir == FacingDirection.Down)
+        else if ( dir == FacingDirection.Down)
             MoveY= -1;
-            else if ( dir == FacingDirection.Up)
+        else if ( dir == FacingDirection.Up)
             MoveY= 1;
     }
 
@@ -79,4 +78,5 @@ public class CharacterAnimator : MonoBehaviour
         get => defaultDirection;
     }
 }
- public enum FacingDirection { Up, Down, Left, Right }
+
+public enum FacingDirection { Up, Down, Left, Right }

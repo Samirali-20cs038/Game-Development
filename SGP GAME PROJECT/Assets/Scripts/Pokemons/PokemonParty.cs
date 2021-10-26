@@ -8,11 +8,7 @@ public class PokemonParty : MonoBehaviour
     [SerializeField] List<Pokemon> pokemons;
 
     //For crearing refrence
-    public List<Pokemon> Pokemons {
-        get {
-            return pokemons;
-        }
-    }
+    public List<Pokemon> Pokemons { get { return pokemons; } }
 
     private void Start()
     {
@@ -21,6 +17,7 @@ public class PokemonParty : MonoBehaviour
             pokemon.Init();
         }
     }
+    
     public Pokemon GetHealthyPokemon()
     {
         return pokemons.Where(x => x.HP > 0).FirstOrDefault();

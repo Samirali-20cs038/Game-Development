@@ -17,16 +17,8 @@ public class Pokemon
         Init();
     }
 
-    public PokemonBase Base { 
-        get {
-            return _base;
-        }
-     }
-    public int Level { 
-        get{
-            return level;
-        }
-    }
+    public PokemonBase Base { get { return _base; } }
+    public int Level { get{ return level; } }
 
     public int Exp { get; set; }
     public int HP { get; set; }
@@ -46,7 +38,6 @@ public class Pokemon
     
     //To change the status of pokemon everytime 
     public event System.Action OnStatusChanged;
-
 
     public void Init()
     {
@@ -95,7 +86,6 @@ public class Pokemon
             {Stat.Speed , 0},
             {Stat.Accuracy , 0},
             {Stat.Evasion , 0},
-
         };
     }
 
@@ -270,12 +260,12 @@ public class Pokemon
         }
         return canPerformMove;
     }
+
     public void OnAfterTurn()
     {
         Status?.OnAfterTurn?.Invoke(this);
         VolatileStatus?.OnAfterTurn?.Invoke(this);
     }
-
 
     public void OnBattleOver()
     {

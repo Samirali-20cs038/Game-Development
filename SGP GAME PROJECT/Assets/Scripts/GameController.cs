@@ -13,6 +13,7 @@ public class GameController : MonoBehaviour
 	[SerializeField] Camera worldCamera;
 	// Local variables
 	GameState state;
+
 	public static GameController Instance { get; private set;}
 
 	private void Awake()
@@ -24,7 +25,6 @@ public class GameController : MonoBehaviour
 	private void Start()
 	{
 		battleSystem.OnBattleOver += EndBattle;
-
 
 		DialogueManager.Instance.OnShowDialog += () =>
 		{

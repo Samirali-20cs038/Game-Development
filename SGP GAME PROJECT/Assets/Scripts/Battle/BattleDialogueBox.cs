@@ -36,6 +36,7 @@ public class BattleDialogueBox : MonoBehaviour
 	{
 		dialogueText.text = dialogue;
 	}
+
 	// To display dialogueText with animation
 	public IEnumerator TypeDialogue(string dialogue)
 	{
@@ -80,6 +81,7 @@ public class BattleDialogueBox : MonoBehaviour
 				actionTexts[i].color = Color.black;
 		}
 	}
+
 	// Update move panel texts according to player input
 	public void UpdateMoveSelection(int selectedMove, Move move)
 	{
@@ -101,6 +103,7 @@ public class BattleDialogueBox : MonoBehaviour
 		else 
 			ppText.color = Color.black;
 	}
+	
 	// Set move names available from player unit
 	public void SetMoveNames(List<Move> moves)
 	{

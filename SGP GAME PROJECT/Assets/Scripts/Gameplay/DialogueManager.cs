@@ -15,17 +15,17 @@ public class DialogueManager : MonoBehaviour
 
     public static DialogueManager Instance{ get; private set; }
 
-    public void Awake()
-    {
-        Instance = this;        
-    }
-
     Dialogue dialogue;
     Action onDialogFinished;
     int currentLine = 0;
     bool isTyping;
 
     public bool  IsShowing { get; private set;}    
+
+    public void Awake()
+    {
+        Instance = this;        
+    }
 
     public IEnumerator ShowDialogue(Dialogue dialogue, Action onFinished=null)
     {

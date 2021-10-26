@@ -8,12 +8,15 @@ public class Character : MonoBehaviour
     public float moveSpeed;
 
     public bool IsMoving { get; private set;}
+
     CharacterAnimator animator;
-    private void Awake()
+    
+	private void Awake()
     {
         animator = GetComponent<CharacterAnimator>();
     }
-   public IEnumerator Move(Vector2 moveVec, Action OnMoveOver=null)
+	
+	public IEnumerator Move(Vector2 moveVec, Action OnMoveOver=null)
 	{
         animator.MoveX = Mathf.Clamp(moveVec.x, -1f, 1f);
 		animator.MoveY = Mathf.Clamp(moveVec.y, -1f, 1f);
@@ -51,8 +54,10 @@ public class Character : MonoBehaviour
 		var dir = diff.normalized;
 
 
-	if(Physics2D.BoxCast(transform.position + dir,new Vector2(0.2f,0.2f),0f,dir,diff.magnitude - 1, GameLayers.i.SolidLayer | GameLayers.i.InteractableLayer | GameLayers.i.PlayerLayer) == true )
+		if(Physics2D.BoxCast(transform.position + dir,new Vector2(0.2f,0.2f),0f,dir,diff.magnitude - 1, GameLayers.i.SolidLayer | GameLayers.i.InteractableLayer | GameLayers.i.PlayerLayer) == true)
+		{
 			return false;
+		}
 
 		return true;
 	}
@@ -63,24 +68,26 @@ public class Character : MonoBehaviour
 		{
 			return false;
 		}
+
 		return true;
 	}
 
 
 	public void LookTowards  (Vector3 targetPos)
-		{
-			var xdiff = Mathf.Floor(targetPos.x) - Mathf.Floor(transform.position.x);
-			var ydiff = Mathf.Floor(targetPos.y) - Mathf.Floor(transform.position.y);
+	{
+		var xdiff = Mathf.Floor(targetPos.x) - Mathf.Floor(transform.position.x);
+		var ydiff = Mathf.Floor(targetPos.y) - Mathf.Floor(transform.position.y);
 
-			if (xdiff==0 || ydiff==0)
-			{
-				animator.MoveX = Mathf.Clamp(xdiff, -1f, 1f);
-				animator.MoveY = Mathf.Clamp(ydiff, -1f, 1f);	
-			}
-			else
-			Debug.LogError("Error is Look Towards: You can't ask the character to look diagonally");
+		if (xdiff==0 || ydiff==0)
+		{
+			animator.MoveX = Mathf.Clamp(xdiff, -1f, 1f);
+			animator.MoveY = Mathf.Clamp(ydiff, -1f, 1f);	
 		}
-    public CharacterAnimator Animator {
+		else
+			Debug.LogError("Error is Look Towards: You can't ask the character to look diagonally");
+	}
+    
+	public CharacterAnimator Animator {
         get => animator;
     }
 }

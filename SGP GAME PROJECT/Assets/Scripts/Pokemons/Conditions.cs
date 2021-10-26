@@ -3,14 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-/*
-*
-*@author : Mitren Kadiwala
-*
-*
-*/
-
-
 public class Condition 
 {
     public ConditionID Id {get; set; }

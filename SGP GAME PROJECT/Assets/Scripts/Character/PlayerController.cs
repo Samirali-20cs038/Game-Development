@@ -9,10 +9,10 @@ public class PlayerController : MonoBehaviour
     [SerializeField] Sprite sprite;
 
 	const float offssetY = 0.3f;
-
 	
 	private Vector2 input;
 	private Character character;
+
 	private void Awake()
 	{
 		character = GetComponent<Character>();
@@ -55,7 +55,6 @@ public class PlayerController : MonoBehaviour
 		}
 	}
 
-
 	private void OnMoveOver() 
 	{
 		var colliders = (Physics2D.OverlapCircleAll(transform.position - new Vector3(0, offssetY), 0.2f, GameLayers.i.TrigerrableLayers));
@@ -71,16 +70,12 @@ public class PlayerController : MonoBehaviour
 			}
 		}
 	}
-	
-
-	
 
 	public string Name {
         get => name;
     }
 
-
-     public Sprite Sprite {
+    public Sprite Sprite {
         get => sprite;
     }
 }

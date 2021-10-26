@@ -13,13 +13,9 @@ public class BattleUnit : MonoBehaviour
     [SerializeField] bool isPlayerUnit;
     [SerializeField] BattleHud hud;
 
-    public bool IsPlayerUnit {
-        get { return isPlayerUnit; }
-    }
+    public bool IsPlayerUnit { get { return isPlayerUnit; } }
 
-    public BattleHud Hud {
-        get { return hud; }
-    }
+    public BattleHud Hud { get { return hud; } }
 
     public Pokemon Pokemon { get; set; }
 
@@ -67,6 +63,7 @@ public class BattleUnit : MonoBehaviour
 
         image.transform.DOLocalMoveX(originalPos.x, 1f);
     }
+
     public void PlayAttackAnimation()
     {
         var sequence = DOTween.Sequence();
@@ -77,12 +74,14 @@ public class BattleUnit : MonoBehaviour
 
         sequence.Append(image.transform.DOLocalMoveX(originalPos.x, 0.25f));
     }
+
     public void PlayHitAnimation()
     {
         var sequence = DOTween.Sequence();
         sequence.Append(image.DOColor(Color.gray, 0.1f));
         sequence.Append(image.DOColor(originalColor, 0.2f));
     }
+
     public void PlayFaintAnimation()
     {
         var sequence = DOTween.Sequence();
@@ -99,7 +98,7 @@ public class BattleUnit : MonoBehaviour
         yield return sequence.WaitForCompletion();
     }
 
-     public IEnumerator PlayerBreakOutAnimation()
+    public IEnumerator PlayerBreakOutAnimation()
     {
         var sequence = DOTween.Sequence();
         sequence.Append(image.DOFade(1, 0.5f));
