@@ -23,19 +23,8 @@ public class GameController : MonoBehaviour
 
 	private void Start()
 	{
-		playerController.OnEncounter += StartBattle;
 		battleSystem.OnBattleOver += EndBattle;
 
-		//Using Lambda notation
-		playerController.OnEnterTrainersView += (Collider2D trainerCollider) =>
-		{
-			var trainer = trainerCollider.GetComponentInParent<TrainerController>();
-			if (trainer != null)
-			{
-				state = GameState.Cutscene;
-				StartCoroutine(trainer.TriggerTrainerBattle(playerController));
-			}
-		};
 
 		DialogueManager.Instance.OnShowDialog += () =>
 		{
@@ -50,7 +39,7 @@ public class GameController : MonoBehaviour
 	}
 	
 	// This method makes game state into battle state
-	void StartBattle()
+	public void StartBattle()
 	{
 		state = GameState.Battle;
 		battleSystem.gameObject.SetActive(true);
@@ -77,6 +66,12 @@ public class GameController : MonoBehaviour
 		var trainerParty = trainer.GetComponent<PokemonParty>();
 
 		battleSystem.StartTrainerBattle(playerParty, trainerParty);
+	}
+
+	public void OnEnterTrainersView(TrainerController trainer)
+	{
+		state = GameState.Cutscene;
+		StartCoroutine(trainer.TriggerTrainerBattle(playerController));
 	}
 
 	// This method reverts game state back into free roam state

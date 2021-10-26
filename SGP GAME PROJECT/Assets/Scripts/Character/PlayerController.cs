@@ -10,9 +10,7 @@ public class PlayerController : MonoBehaviour
 
 	const float offssetY = 0.3f;
 
-	public event Action OnEncounter;
-	public event Action<Collider2D> OnEnterTrainersView;
-
+	
 	private Vector2 input;
 	private Character character;
 	private void Awake()
@@ -60,30 +58,22 @@ public class PlayerController : MonoBehaviour
 
 	private void OnMoveOver() 
 	{
-		CheckForEncounters();
-		CheckIfInTrainersView();
-	}
-	private void CheckForEncounters()
-	{
-		if (Physics2D.OverlapCircle(transform.position - new Vector3(0, offssetY), 0.2f, GameLayers.i.GrassLayer) != null)
+		var colliders = (Physics2D.OverlapCircleAll(transform.position - new Vector3(0, offssetY), 0.2f, GameLayers.i.TrigerrableLayers));
+
+		foreach(var collider in colliders)
 		{
-			if (UnityEngine.Random.Range(1, 101) <= 10)
+			var trigerrable = collider.GetComponent<IPlayerTriggerable>();
+			if(trigerrable != null)
 			{
 				character.Animator.IsMoving =false;
-				OnEncounter();
+				trigerrable.OnPlayerTriggered(this);
+				break;
 			}
 		}
 	}
+	
 
-	private void CheckIfInTrainersView()
-	{
-		var collider = Physics2D.OverlapCircle(transform.position - new Vector3(0, offssetY), 0.2f, GameLayers.i.FovLayer);
-		if (collider != null)
-		{
-			character.Animator.IsMoving =false;
-			OnEnterTrainersView?.Invoke(collider);
-		}
-	}
+	
 
 	public string Name {
         get => name;
